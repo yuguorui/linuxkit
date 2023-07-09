@@ -16,6 +16,7 @@ func pushCmd() *cobra.Command {
 	cmd.AddCommand(pushAWSCmd())
 	cmd.AddCommand(pushAzureCmd())
 	cmd.AddCommand(pushGCPCmd())
+	cmd.AddCommand(pushAlibabaCloudCmd())
 	cmd.AddCommand(pushOpenstackCmd())
 	cmd.AddCommand(pushEquinixMetalCmd())
 	cmd.AddCommand(pushScalewayCmd())
