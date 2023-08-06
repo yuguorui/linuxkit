@@ -102,6 +102,17 @@ var outFuns = map[string]func(base string, ir io.Reader, size int, arch string) 
 		}
 		return nil
 	},
+	"raw-efi-ext4": func(base string, image io.Reader, size int, arch string) error {
+		kernel, initrd, cmdline, _, err := tarToInitrd(image)
+		if err != nil {
+			return fmt.Errorf("Error converting to initrd: %v", err)
+		}
+		err = outputImg(outputImages["raw-efi-ext4"], base+"-efi-ext4.img", kernel, initrd, cmdline, arch)
+		if err != nil {
+			return fmt.Errorf("Error writing raw-efi-ext4 output: %v", err)
+		}
+		return nil
+	},
 	"kernel+iso": func(base string, image io.Reader, size int, arch string) error {
 		err := outputKernelISO(outputImages["iso"], base, image, arch)
 		if err != nil {
