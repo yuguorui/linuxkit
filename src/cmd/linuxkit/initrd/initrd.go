@@ -8,14 +8,14 @@ import (
 	"strings"
 
 	// drop-in 100% compatible replacement and 17% faster than compress/gzip.
-	gzip "github.com/klauspost/pgzip"
+	"github.com/klauspost/compress/zstd"
 	cpio "github.com/surma/gocpio"
 )
 
 // Writer is an io.WriteCloser that writes to an initrd
 // This is a compressed cpio archive, zero padded to 4 bytes
 type Writer struct {
-	gw *gzip.Writer
+	gw *zstd.Encoder
 	cw *cpio.Writer
 }
 
@@ -132,7 +132,7 @@ func CopySplitTar(w *Writer, r *tar.Reader) (kernel []byte, cmdline string, ucod
 // NewWriter creates a writer that will output an initrd stream
 func NewWriter(w io.Writer) *Writer {
 	initrd := new(Writer)
-	initrd.gw = gzip.NewWriter(w)
+	initrd.gw, _ = zstd.NewWriter(w)
 	initrd.cw = cpio.NewWriter(initrd.gw)
 
 	return initrd
